@@ -28,11 +28,17 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i "/usr/share/backgrounds/illyria-default.png"
+
+#Set background
+exec --no-startup-id feh --no-fehbg --bg-scale '/home/daerich/Pictures/bliss.png'
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+
+#Start Picom
+exec --no-startup-id ! pgrep picom &>/dev/null && picom -b
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -62,7 +68,7 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
-bindsym $mod+odiaeresis focus right
+#bindsym $mod+h focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -154,6 +160,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+p exec "i3-nagbar -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your X session.' -B 'Yes, shutdown' 'systemctl poweroff'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -181,8 +188,8 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-bindsym $mod+Shift+x exec "loginctl lock-session"
-bindsym $mod+Shift+s exec "systemctl suspend"
+bindsym $mod+Shift+x exec --no-startup-id "loginctl lock-session"
+bindsym $mod+Shift+s exec --no-startup-id "systemctl suspend"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
