@@ -31,7 +31,7 @@ exec swayidle -w \
 	timeout 1800 'swaylock -f' \
 	timeout 1805 'swaymsg "output * dpms off"' \
 	lock 'swaylock -f' \
-	resume 'swaymsg "output * dpms on"'
+	after-resume 'swaymsg "output * dpms on"'
 _endif(`m4_sway')
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -172,11 +172,11 @@ _ifdef(`m4_i3')
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit _wman? This will end your X session.' -B 'Yes, exit _wman' '_wman-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+Shift+p exec "i3-nagbar -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your X session.' -B 'Yes, shutdown' 'systemctl poweroff'"
 _endif(`m4_i3')
 _ifdef(`m4_sway')
-bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit _wman? This will end your wayland session.' -B 'Yes, exit _wman' '_wman-msg exit'"
+bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your wayland session.' -B 'Yes, exit sway' 'swaymsg exit'"
 bindsym $mod+Shift+p exec "swaynag -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your wayland session.' -B 'Yes, shutdown' 'systemctl poweroff'"
 _endif(`m4_sway')
 # resize window (you can also use the mouse for that)
@@ -206,7 +206,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 bindsym $mod+Shift+x exec --no-startup-id "loginctl lock-session"
-bindsym $mod+Shift+s exec --no-startup-id "systemctl suspend"
+bindsym $mod+Shift+s exec --no-startup-id "loginctl lock-session && systemctl suspend"
 
 _ifdef(`m4_sway')
 input * {
