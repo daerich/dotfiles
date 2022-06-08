@@ -171,11 +171,14 @@ bindsym $mod+Shift+c reload
 _ifdef(`m4_i3')
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-_endif(`m4_i3')
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "_wman-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit _wman? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+p exec "_wman-nagbar -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your X session.' -B 'Yes, shutdown' 'systemctl poweroff'"
-
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit _wman? This will end your X session.' -B 'Yes, exit _wman' '_wman-msg exit'"
+bindsym $mod+Shift+p exec "i3-nagbar -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your X session.' -B 'Yes, shutdown' 'systemctl poweroff'"
+_endif(`m4_i3')
+_ifdef(`m4_sway')
+bindsym $mod+Shift+e exec "swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit _wman? This will end your wayland session.' -B 'Yes, exit _wman' '_wman-msg exit'"
+bindsym $mod+Shift+p exec "swaynag -t error -m 'You pressed the shutdown shortcut. Do you really want to shutdown? This will end your wayland session.' -B 'Yes, shutdown' 'systemctl poweroff'"
+_endif(`m4_sway')
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
