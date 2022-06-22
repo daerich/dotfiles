@@ -1,4 +1,7 @@
 CONFIGS=i3 sway
+
+all: ${CONFIGS}
+
 i3: i3.sample 
 	m4 -P -Dm4_i3 i3.sample > i3
 sway: i3.sample
@@ -10,4 +13,4 @@ install:
 	done
 clean:
 	rm ${CONFIGS}
-.PHONY: install clean
+.PHONY: all install clean

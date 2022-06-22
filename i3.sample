@@ -28,10 +28,10 @@ exec --no-startup-id dex --autostart --environment _wman
 
 _ifdef(`m4_sway')
 exec swayidle -w \
-	timeout 1800 'swaylock -f' \
+	timeout 1800 'swaylock -f -i "/usr/share/backgrounds/illyria-default.png"'\
 	timeout 1805 'swaymsg "output * dpms off"' \
-	lock 'swaylock -f' \
-	after-resume 'swaymsg "output * dpms on"'
+	resume 'swaymsg "output * dpms on"'\
+	lock 'swaylock -f -i "/usr/share/backgrounds/illyria-default.png"'
 _endif(`m4_sway')
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
@@ -45,9 +45,7 @@ exec --no-startup-id feh --no-fehbg --bg-scale '/home/daerich/Pictures/bliss.png
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-_endif(`m4_i3')
 exec --no-startup-id nm-applet
-_ifdef(`m4_i3')
 #Start Picom
 exec --no-startup-id ! pgrep picom &>/dev/null && picom -b
 _endif(`m4_i3')
@@ -69,7 +67,7 @@ bindsym $mod+Return exec --no-startup-id  alacritty
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id m4_ifdef(`m4_i3', `dmenu_run', `bemenu-run')
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -205,15 +203,20 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
+_ifdef(`m4_sway')
+bindsym $mod+Shift+x exec --no-startup-id "sleep 1;pkill -USR1 swayidle"
+_endif(`m4_sway')
+_ifdef(`m4_i3')
 bindsym $mod+Shift+x exec --no-startup-id "loginctl lock-session"
+_endif(`m4_i3')
 bindsym $mod+Shift+s exec --no-startup-id "loginctl lock-session && systemctl suspend"
 
 _ifdef(`m4_sway')
-input * {
+input type:keyboard {
     xkb_layout "de"
     xkb_variant "nodeadkeys"
+    xkb_model "pc105"
 }
-input type:keyboard xkb_model "pc105"
 output "*" bg "/home/daerich/Pictures/bliss.png" fill
 input type:touchpad {
     tap enabled
@@ -223,5 +226,8 @@ _endif(`m4_sway')
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+        status_command i3status-rs
 }
+_ifdef(`m4_sway')
+exec --no-startup-id renice -n 8 $(pgrep swaybar)
+_endif(`m4_sway')
