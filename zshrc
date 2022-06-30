@@ -35,9 +35,10 @@ wgq(){
 	wg-quick $1 $_DEFAULT
 }
 starttmux() {
+	[[ -z $TMUX ]] || return 0
 	printf "Start tmux? [y/N]\n"
 	# read -e is a zsh extension
-	if [[ $(read -e) =~ "^Y|y([[:space:]])*$" && -z $TMUX ]]; then
+	if [[ $(read -e) =~ "^Y|y([[:space:]])*$" ]]; then
 		tm
 	fi
 }
