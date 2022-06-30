@@ -1,3 +1,6 @@
+# Opacity
+window:
+  opacity: 0.8
 # Blinking cursor
 cursor:
   style:
