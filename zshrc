@@ -1,4 +1,3 @@
-alias dsleep='sleep 1;xset dpms force off'
 alias sc='grim -g "$(slurp)"'
 alias irc='ssh irc'
 alias diff='diff -u --color'
@@ -11,6 +10,13 @@ PROMPT='%B%F{cyan}%n%f%F{green}@%f%m%b - %B%F{blue}%~%f%b %# > '
 emulate ksh
 export MOZ_ENABLE_WAYLAND=1
 export PATH="$PATH:/opt/bin"
+dsleep(){
+	if [ -z $WAYLAND_DISPLAY ]; then
+		sleep 1;xset dpms force off
+	else
+		sleep 1;pkill -USR1 swayidle
+	fi
+}
 powerstat()
 {
 	for bat in /sys/class/power_supply/BAT*;do
@@ -42,8 +48,24 @@ starttmux() {
 		tm
 	fi
 }
+#Tmuxify and make way for transient sessions
+_setsocket() {
+	[[ $1 = "sway" ]] &&
+	for _SWAYSOCKET in /run/user/$(id -u)/sway-ipc*;do
+		export SWAYSOCK=$_SWAYSOCKET
+		export I3SOCK=$_SWAYSOCKET
+		return
+	done
+	[[ $1 = "i3" ]] &&
+	for _SWAYSOCKET in /run/user/$(id -u)/i3/ipc-socket.*;do
+		export I3SOCK=$_SWAYSOCKET
+		return
+	done
+	printf "Usage:\n$0 sway|i3\n"
+}
 
-gpg-agent --daemon
+gpg-agent --daemon &> /dev/null
+printf "Attempto!\n"
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 emulate zsh

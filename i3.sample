@@ -205,7 +205,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 _ifdef(`m4_sway')
-bindsym $mod+Shift+x exec --no-startup-id "sleep 1;pkill -USR1 swayidle"
+bindsym $mod+Shift+x exec --no-startup-id 'swaylock -f -i "/usr/share/backgrounds/illyria-default.png"'
 _endif(`m4_sway')
 _ifdef(`m4_i3')
 bindsym $mod+Shift+x exec --no-startup-id "loginctl lock-session"
@@ -214,8 +214,9 @@ bindsym $mod+Shift+s exec --no-startup-id "loginctl lock-session && systemctl su
 
 _ifdef(`m4_sway')
 input type:keyboard {
-    xkb_layout "de"
-    xkb_variant "e1"
+    xkb_layout "de,us"
+    xkb_variant ","
+    xkb_options "grp:alt_space_toggle"
     xkb_model "pc105"
 }
 input type:touchpad {
