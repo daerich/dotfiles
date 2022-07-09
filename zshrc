@@ -3,18 +3,19 @@ alias irc='ssh irc'
 alias diff='diff -u --color'
 alias ls='ls --color=auto -A'
 alias updgpgtty='gpg-connect-agent updatestartuptty /bye'
+alias ed='ed -p"eddie > "'
 alias vi='vim'
-
+bindkey -v
 PROMPT='%B%F{cyan}%n%f%F{green}@%f%m%b - %B%F{blue}%~%f%b %# > '
 # Emulate bash
 emulate ksh
 export MOZ_ENABLE_WAYLAND=1
 export PATH="$PATH:/opt/bin"
 dsleep(){
-	if [ -z $WAYLAND_DISPLAY ]; then
+	if pgrep Xorg; then
 		sleep 1;xset dpms force off
 	else
-		sleep 1;pkill -USR1 swayidle
+                sleep 1;pkill -USR1 swayidle
 	fi
 }
 powerstat()
@@ -65,7 +66,6 @@ _setsocket() {
 }
 
 gpg-agent --daemon &> /dev/null
-printf "Attempto!\n"
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 emulate zsh
@@ -74,5 +74,6 @@ export LC_TIME=fr_FR.UTF8
 export EDITOR='vim'
 . /usr/share/fzf/completion.zsh
 . /usr/share/fzf/key-bindings.zsh
+printf "Attempto!\n"
 starttmux
 return 0

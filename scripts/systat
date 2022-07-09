@@ -1,0 +1,14 @@
+#!/bin/sh
+[ $1 = "power" ] &&
+for bat in /sys/class/power_supply/BAT*;do
+	if [ $bat = "/sys/class/power_supply/BAT*" ];then
+		printf "No batteries found!\nACPI error?\n"
+		return
+	fi
+	printf "$(basename $bat)"
+	grep -q "Charging" $bat/status && printf "(CHR)"
+	printf ":"
+	cat $bat/capacity | tr '\n' ' '
+done
+[ $1 = "keyboard" ] &&
+swaymsg -t get_inputs | jq -r '.[] | select(.identifier == "1:1:AT_Translated_Set_2_keyboard") | .xkb_active_layout_name'
