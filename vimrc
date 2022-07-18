@@ -10,3 +10,4 @@ nnoremap <F5> :Explore
 "Dracula theme
 packadd! dracula
 colorscheme dracula
+hi Normal ctermbg=None
