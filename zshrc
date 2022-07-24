@@ -1,17 +1,21 @@
-alias sc='grim -g "$(slurp)"'
-alias irc='ssh irc'
 alias diff='diff -u --color'
-alias ls='ls --color=auto -A'
-alias updgpgtty='gpg-connect-agent updatestartuptty /bye'
 alias ed='ed -p"eddie > "'
+alias irc='ssh irc'
+alias info='info --vi-keys'
+alias ls='ls --color=auto -A'
+alias sc='grim -g "$(slurp)"'
+alias updgpgtty='gpg-connect-agent updatestartuptty /bye'
 alias vi='vim'
+
 bindkey -v
 PROMPT='%B%F{cyan}%n%f%F{green}@%f%m%b - %B%F{blue}%~%f%b %# > '
+
 export MOZ_ENABLE_WAYLAND=1
 export PATH="$PATH:/opt/bin"
 export EDITOR='vim'
+
 dsleep(){
-	if pgrep Xorg; then
+	if pgrep Xorg &>/dev/null; then
 		sleep 1;xset dpms force off
 	else
                 sleep 1;pkill -USR1 swayidle
@@ -69,8 +73,6 @@ _setsocket() {
 gpg-agent --daemon &> /dev/null
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-. /usr/share/fzf/completion.zsh
-. /usr/share/fzf/key-bindings.zsh
 printf "Attempto!\n"
 starttmux
 return 0
