@@ -2,8 +2,12 @@
 ;; Clean interface
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 ;; Customization
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(let ((default-directory "~/.emacs.d/packs"))
+(normal-top-level-add-subdirs-to-load-path))
 (load-theme 'dracula t)
-(add-to-list 'load-path "~/.emacs.d/evil")
 (require 'evil)
 (evil-mode 1)
